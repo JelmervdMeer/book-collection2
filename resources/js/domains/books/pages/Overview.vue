@@ -3,12 +3,8 @@ import { onMounted } from 'vue';
 import { fetchBooks, getAllBooks } from '../store';
 
 onMounted(async () => {
-    console.log('FETCH BOOKS')
-
-    await fetchBooks()
-
-    console.log('BOOKS:', getAllBooks.value)
-})
+    await fetchBooks();
+});
 </script>
 
 <template>
@@ -19,6 +15,7 @@ onMounted(async () => {
                 <th>Genre</th>
                 <th>Jaar</th>
                 <th>Beschrijving</th>
+                <th>Acties</th>
             </tr>
         </thead>
 
@@ -28,6 +25,14 @@ onMounted(async () => {
                 <td>{{ book.genre }}</td>
                 <td>{{ book.publication_year }}</td>
                 <td>{{ book.description }}</td>
+
+                <td>
+                    <RouterLink
+                        :to="{ name: 'books.edit', params: { id: book.id } }"
+                    >
+                        Bewerk
+                    </RouterLink>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import Form from '../components/form.vue'
+import Form from '../components/Form.vue'
 import { createBook } from '../store'
 import { useRouter } from 'vue-router'
 

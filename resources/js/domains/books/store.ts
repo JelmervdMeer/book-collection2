@@ -26,3 +26,12 @@ export const createBook = async (newBook: Book) => {
 
     books.value = response.data.data
 }
+
+export const updateBook = async (id: number, updatedBook: any) => {
+    const { data } = await axios.put(`/api/books/${id}`, updatedBook)
+
+    books.value = data.data
+}
+
+export const getBookById = (id: number) =>
+    computed(() => books.value.find(book => book.id == id))
