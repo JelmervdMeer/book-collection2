@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { fetchBooks, getAllBooks } from '../store';
+import { fetchBooks, getAllBooks, deleteBook } from '../store';
 
 onMounted(async () => {
     await fetchBooks();
@@ -32,7 +32,11 @@ onMounted(async () => {
                     >
                         Bewerk
                     </RouterLink>
+                    <button @click="deleteBook(book.id)">
+        Verwijder
+    </button>
                 </td>
+                
             </tr>
         </tbody>
     </table>

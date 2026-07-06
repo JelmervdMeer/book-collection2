@@ -11,8 +11,13 @@ type Book = {
 
 const books = ref<Book[]>([])
 
+// Getters
 export const getAllBooks = computed(() => books.value)
 
+export const getBookById = (id: number) =>
+    computed(() => books.value.find(book => book.id === id))
+
+// Actions
 export const fetchBooks = async () => {
     const response = await axios.get('/api/books')
 
@@ -33,5 +38,8 @@ export const updateBook = async (id: number, updatedBook: any) => {
     books.value = data.data
 }
 
-export const getBookById = (id: number) =>
-    computed(() => books.value.find(book => book.id == id))
+export const deleteBook = async (id: number) => {
+    await axios.delete(`/api/books/${id}`)
+
+    books.value = books.value.filter(book => book.id !== id)
+}

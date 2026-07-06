@@ -26,4 +26,9 @@ public function update(StoreBookRequest $request, Book $book) {
     $books = Book::all();
     return BookResource::collection($books);
 }
+
+public function destroy(Book $book) {
+    $book->delete();
+    return response()->json(['message' => 'Boek succesvol verwijderd']);
+}
 }
