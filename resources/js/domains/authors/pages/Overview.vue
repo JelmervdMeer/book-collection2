@@ -1,50 +1,88 @@
 <script setup lang="ts">
+
 import { onMounted } from 'vue'
-import { fetchAuthors, getAllAuthors, deleteAuthor } from '../store'
+import { storeModuleFactory } from '../../../services/store'
+
+
+const authorStore = storeModuleFactory('authors')
+
+
+const authors = authorStore.getters.all
+
 
 onMounted(() => {
-    fetchAuthors()
+    authorStore.actions.getAll()
 })
 
-const handleDelete = async (id: number | undefined) => {
-    if (!id) return
+
+const handleDelete = async (id: number) => {
 
     try {
-        await deleteAuthor(id)
+        await authorStore.actions.delete(id)
     } catch (error) {
         console.error('Fout bij verwijderen:', error)
     }
+
 }
+
 </script>
 
+
 <template>
+
     <table>
+
         <thead>
             <tr>
                 <th>Naam</th>
+                <th>Email</th>
                 <th>Acties</th>
             </tr>
         </thead>
 
+
         <tbody>
-            <tr v-for="author in getAllAuthors" :key="author.id">
-                <td>{{ author.name }}</td>
+
+            <tr
+                v-for="author in authors"
+                :key="author.id"
+            >
 
                 <td>
+                    {{ author.name }}
+                </td>
+
+                <td>
+                    {{ author.email }}
+                </td>
+
+
+                <td>
+
                     <RouterLink
-                        :to="{ 
+                        :to="{
                             name: 'authors.edit',
-                            params: { id: author.id }
+                            params: {
+                                id: author.id
+                            }
                         }"
                     >
                         Bewerk
                     </RouterLink>
 
-                    <button @click="handleDelete(author.id)">
+
+                    <button
+                        @click="handleDelete(author.id)"
+                    >
                         Verwijder
                     </button>
+
                 </td>
+
             </tr>
+
         </tbody>
+
     </table>
+
 </template>
