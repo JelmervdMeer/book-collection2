@@ -1,5 +1,12 @@
-import axios from 'axios'
 import { ref, computed } from 'vue'
+
+import {
+    getRequest,
+    postRequest,
+    putRequest,
+    deleteRequest
+} from '../../services/http'
+
 
 type Book = {
     id: number
@@ -9,37 +16,57 @@ type Book = {
     description: string
 }
 
+
 const books = ref<Book[]>([])
 
-// Getters
+
 export const getAllBooks = computed(() => books.value)
 
-export const getBookById = (id: number) =>
-    computed(() => books.value.find(book => book.id === id))
 
-// Actions
 export const fetchBooks = async () => {
-    const response = await axios.get('/api/books')
 
-    books.value = response.data
+    const { data } = await getRequest('/books')
 
-    console.log(books.value)
+    books.value = data
 }
+
 
 export const createBook = async (newBook: Book) => {
-    const response = await axios.post('/api/books', newBook)
 
-    books.value = response.data.data
-}
-
-export const updateBook = async (id: number, updatedBook: any) => {
-    const { data } = await axios.put(`/api/books/${id}`, updatedBook)
+    const { data } = await postRequest('/books', newBook)
 
     books.value = data.data
 }
 
-export const deleteBook = async (id: number) => {
-    await axios.delete(`/api/books/${id}`)
 
-    books.value = books.value.filter(book => book.id !== id)
+export const updateBook = async (
+    id: number,
+    updatedBook: Book
+) => {
+
+    const { data } = await putRequest(
+        `/books/${id}`,
+        updatedBook
+    )
+
+    books.value = data.data
 }
+
+
+export const deleteBook = async (id:number) => {
+
+    await deleteRequest(`/books/${id}`)
+
+    books.value =
+        books.value.filter(
+            book => book.id !== id
+        )
+}
+
+
+export const getBookById = (id:number) =>
+    computed(() =>
+        books.value.find(
+            book => book.id === id
+        )
+    )
