@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { onMounted } from 'vue'
 import { storeModuleFactory } from '../../../services/store'
 
@@ -11,24 +10,17 @@ onMounted(() => {
     bookStore.actions.getAll()
 })
 
-
 const handleDelete = async (id: number) => {
-
     try {
         await bookStore.actions.delete(id)
     } catch (error) {
         console.error('Fout bij verwijderen:', error)
     }
-
 }
-
 </script>
 
-
 <template>
-
     <table>
-
         <thead>
             <tr>
                 <th>Titel</th>
@@ -38,29 +30,18 @@ const handleDelete = async (id: number) => {
             </tr>
         </thead>
 
-
         <tbody>
-
-            <tr 
-                v-for="book in books" 
+            <tr
+                v-for="book in books"
                 :key="book.id"
             >
+                <td>{{ book.title }}</td>
+
+                <td>{{ book.genre }}</td>
+
+                <td>{{ book.publication_year }}</td>
 
                 <td>
-                    {{ book.title }}
-                </td>
-
-                <td>
-                    {{ book.genre }}
-                </td>
-
-                <td>
-                    {{ book.publication_year }}
-                </td>
-
-
-                <td>
-
                     <RouterLink
                         :to="{
                             name: 'books.edit',
@@ -72,19 +53,11 @@ const handleDelete = async (id: number) => {
                         Bewerk
                     </RouterLink>
 
-
-                    <button
-                        @click="handleDelete(book.id)"
-                    >
+                    <button @click="handleDelete(book.id)">
                         Verwijder
                     </button>
-
                 </td>
-
             </tr>
-
         </tbody>
-
     </table>
-
 </template>

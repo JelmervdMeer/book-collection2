@@ -1,11 +1,15 @@
 ```vue
 <script setup lang="ts">
+
 import { ref } from 'vue'
-import { createAuthor } from '../store'
 import { useRouter } from 'vue-router'
+import { storeModuleFactory } from '../../../services/store'
 import Form from '../components/Form.vue'
 
+
 const router = useRouter()
+
+const authorStore = storeModuleFactory('authors')
 
 const author = ref({
     name: '',
@@ -13,12 +17,15 @@ const author = ref({
 })
 
 const handleSubmit = async (data: any) => {
-    await createAuthor(data)
+
+    await authorStore.actions.create(data)
 
     router.push({
         name: 'authors.overview'
     })
+
 }
+
 </script>
 
 <template>

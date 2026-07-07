@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { fetchAuthors, getAuthorById, updateAuthor } from '../store'
+import { storeModuleFactory } from '../../../services/store'
 import Form from '../components/Form.vue'
 
 const route = useRoute()
 const router = useRouter()
 
+const authorStore = storeModuleFactory('authors')
+
 onMounted(() => {
-    fetchAuthors()
+    authorStore.actions.getAll()
 })
 
-const author = getAuthorById(Number(route.params.id))
+const author = authorStore.getters.getById(Number(route.params.id))
 
 const handleSubmit = async (data: any) => {
-    await updateAuthor(
+    await authorStore.actions.update(
         Number(route.params.id),
         data
     )
@@ -24,7 +26,6 @@ const handleSubmit = async (data: any) => {
     })
 }
 </script>
-
 
 <template>
     <div>

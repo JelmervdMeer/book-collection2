@@ -1,22 +1,29 @@
-
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { fetchBooks, getBookById, updateBook, getAllBooks } from '../store'
+import { storeModuleFactory } from '../../../services/store'
 import Form from '../components/Form.vue'
 
 const route = useRoute()
 const router = useRouter()
 
+const bookStore = storeModuleFactory('books')
+
 onMounted(() => {
-    fetchBooks()
+    bookStore.actions.getAll()
 })
 
-const book = getBookById(Number(route.params.id))
+const book = bookStore.getters.getById(Number(route.params.id))
 
 const handleSubmit = async (data: any) => {
-    await updateBook(Number(route.params.id), data)
-    router.push({ name: 'books.overview' })
+    await bookStore.actions.update(
+        Number(route.params.id),
+        data
+    )
+
+    router.push({
+        name: 'books.overview'
+    })
 }
 </script>
 

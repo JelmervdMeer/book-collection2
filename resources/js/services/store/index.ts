@@ -7,11 +7,9 @@ import {
     deleteRequest
 } from '../http'
 
-
 export const storeModuleFactory = (moduleName: string) => {
 
     const state = ref<Record<number, any>>({})
-
 
     const getters = {
 
@@ -23,8 +21,8 @@ export const storeModuleFactory = (moduleName: string) => {
             computed(() =>
                 state.value[id]
             )
-    }
 
+    }
 
     const setters = {
 
@@ -33,37 +31,30 @@ export const storeModuleFactory = (moduleName: string) => {
             state.value = {}
 
             for (const item of items) {
-
                 state.value[item.id] = Object.freeze(item)
-
             }
+
         },
 
+        deleteByItem: (item: { id: number }) => {
 
-        deleteByItem: (id: number) => {
-
-            delete state.value[id]
+            delete state.value[item.id]
 
         }
-    }
 
+    }
 
     const actions = {
 
-
         getAll: async () => {
 
-            const { data } = await getRequest(
-                `/${moduleName}`
-            )
+            const { data } = await getRequest(`/${moduleName}`)
 
             if (!data) return
 
-            setters.setAll(
-                data.data ?? data
-            )
-        },
+            setters.setAll(data.data ?? data)
 
+        },
 
         create: async (item: any) => {
 
@@ -74,11 +65,9 @@ export const storeModuleFactory = (moduleName: string) => {
 
             if (!data) return
 
-            setters.setAll(
-                data.data ?? data
-            )
-        },
+            setters.setAll(data.data ?? data)
 
+        },
 
         update: async (
             id: number,
@@ -92,29 +81,26 @@ export const storeModuleFactory = (moduleName: string) => {
 
             if (!data) return
 
-            setters.setAll(
-                data.data ?? data
-            )
+            setters.setAll(data.data ?? data)
+
         },
 
-
-        delete: async (
-            id: number
-        ) => {
+        delete: async (id: number) => {
 
             await deleteRequest(
                 `/${moduleName}/${id}`
             )
 
-            setters.deleteByItem(id)
+            setters.deleteByItem({ id })
+
         }
 
     }
-
 
     return {
         getters,
         setters,
         actions
     }
+
 }
