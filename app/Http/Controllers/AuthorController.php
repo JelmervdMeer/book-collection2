@@ -2,13 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Author;
+use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Resources\AuthorResource;
+use App\Models\Author;
 
 class AuthorController extends Controller
 {
     public function index()
     {
         return AuthorResource::collection(Author::all());
+    }
+
+    public function store(StoreAuthorRequest $request)
+    {
+        Author::create($request->validated());
+
+        return AuthorResource::collection(Author::all());
+    }
+
+    public function update(StoreAuthorRequest $request, Author $author)
+    {
+        $author->update($request->validated());
+
+        return AuthorResource::collection(Author::all());
+    }
+
+    public function destroy(Author $author)
+    {
+        if ($author->books()->exists()) {
+            return response()->json([
+                'message' => 'Auteur kan niet verwijderd worden omdat deze nog boeken heeft.'
+            ], 400);
+        }
+
+        $author->delete();
+
+        return response()->json([
+            'message' => 'Auteur succesvol verwijderd.'
+        ]);
     }
 }

@@ -1,10 +1,20 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { fetchAuthors, getAllAuthors } from '../store'
+import { fetchAuthors, getAllAuthors, deleteAuthor } from '../store'
 
-onMounted(async () => {
-    await fetchAuthors()
+onMounted(() => {
+    fetchAuthors()
 })
+
+const handleDelete = async (id: number | undefined) => {
+    if (!id) return
+
+    try {
+        await deleteAuthor(id)
+    } catch (error) {
+        console.error('Fout bij verwijderen:', error)
+    }
+}
 </script>
 
 <template>
@@ -12,16 +22,28 @@ onMounted(async () => {
         <thead>
             <tr>
                 <th>Naam</th>
-                <th>E-mail</th>
-                <th>Bio</th>
+                <th>Acties</th>
             </tr>
         </thead>
 
         <tbody>
             <tr v-for="author in getAllAuthors" :key="author.id">
                 <td>{{ author.name }}</td>
-                <td>{{ author.email }}</td>
-                <td>{{ author.bio }}</td>
+
+                <td>
+                    <RouterLink
+                        :to="{ 
+                            name: 'authors.edit',
+                            params: { id: author.id }
+                        }"
+                    >
+                        Bewerk
+                    </RouterLink>
+
+                    <button @click="handleDelete(author.id)">
+                        Verwijder
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>
