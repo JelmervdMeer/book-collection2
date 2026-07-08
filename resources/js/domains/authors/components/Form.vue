@@ -2,6 +2,7 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
+import FormError from '../../../components/FormError.vue'
 
 const props = defineProps({
     author: Object
@@ -33,8 +34,9 @@ const handleSubmit = () => {
     <input
         v-model="form.name"
         type="text"
-        required
     />
+
+    <FormError name="name" />
 
 
     <label>
@@ -44,8 +46,9 @@ const handleSubmit = () => {
     <input
         v-model="form.email"
         type="email"
-        required
     />
+
+    <FormError name="email" />
 
 
     <button type="submit">

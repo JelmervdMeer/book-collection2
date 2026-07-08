@@ -56,18 +56,46 @@ export const storeModuleFactory = (moduleName: string) => {
 
         },
 
+            getByBook: async (bookId: number) => {
+
+        const { data } = await getRequest(
+            `books/${bookId}/reviews`
+        )
+
+        if (!data) return
+
+        setters.setAll(data)
+    },
+
         create: async (item: any) => {
 
-            const { data } = await postRequest(
-                `/${moduleName}`,
-                item
-            )
+    const { data } = await postRequest(
+        `/${moduleName}`,
+        item
+    )
 
-            if (!data) return
+    if (!data) return
 
-            setters.setAll(data.data ?? data)
+    setters.setAll(data.data ?? data)
 
-        },
+},
+
+
+createByBook: async (
+    bookId: number,
+    item: any
+) => {
+
+    const { data } = await postRequest(
+        `/books/${bookId}/reviews`,
+        item
+    )
+
+    if (!data) return
+
+    setters.setAll(data.data ?? data)
+
+},
 
         update: async (
             id: number,

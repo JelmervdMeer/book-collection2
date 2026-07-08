@@ -1,19 +1,87 @@
 import axios from 'axios'
 
+import {
+    destroyErrors,
+    destroyMessage,
+    setErrorBag,
+    setMessage
+} from '../error'
+
+
 const http = axios.create({
+
     baseURL: '/api',
+
     headers: {
         'Content-Type': 'application/json'
     }
+
 })
 
-export const getRequest = (endpoint: string) => http.get(endpoint)
 
-export const postRequest = (endpoint: string, data: any) =>
-    http.post(endpoint, data)
+// oude fouten wissen voordat een nieuw verzoek start
+http.interceptors.request.use(
+    config => {
 
-export const putRequest = (endpoint: string, data: any) =>
-    http.put(endpoint, data)
+        destroyErrors()
+        destroyMessage()
 
-export const deleteRequest = (endpoint: string) =>
-    http.delete(endpoint)
+        return config
+
+    },
+
+    error => Promise.reject(error)
+)
+
+
+
+// fouten ontvangen van Laravel
+http.interceptors.response.use(
+
+    response => response,
+
+
+    error => {
+
+        if (
+            error.response &&
+            error.response.status === 422
+        ) {
+
+            setErrorBag(
+                error.response.data.errors || {}
+            )
+
+            setMessage(
+                error.response.data.message
+            )
+
+        }
+
+
+        return Promise.reject(error)
+
+    }
+
+)
+
+
+
+export const getRequest =
+(endpoint:string) =>
+http.get(endpoint)
+
+
+export const postRequest =
+(endpoint:string, data:any) =>
+http.post(endpoint,data)
+
+
+export const putRequest =
+(endpoint:string,data:any) =>
+http.put(endpoint,data)
+
+
+export const deleteRequest =
+(endpoint:string) =>
+http.delete(endpoint)

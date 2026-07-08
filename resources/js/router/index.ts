@@ -8,5 +8,10 @@ export const router = createRouter({
     routes: [
         ...bookRoutes,
         ...authorRoutes,
+        {
+    path: '/books/:id',
+    name: 'books.show',
+    component: () => import('../domains/books/pages/Show.vue')
+}
     ],
 })

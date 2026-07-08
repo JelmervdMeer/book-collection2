@@ -16,4 +16,16 @@ class Book extends Model
         'description',
         'author_id',
     ];
+
+
+    public function author()
+    {
+        return $this->belongsTo(Author::class);
+    }
+
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

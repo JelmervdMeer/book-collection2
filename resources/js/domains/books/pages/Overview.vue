@@ -53,6 +53,17 @@ const handleDelete = async (id: number) => {
                         Bewerk
                     </RouterLink>
 
+                    <RouterLink
+    :to="{
+        name: 'books.show',
+        params: {
+            id: book.id
+        }
+    }"
+>
+    Details
+</RouterLink>
+
                     <button @click="handleDelete(book.id)">
                         Verwijder
                     </button>

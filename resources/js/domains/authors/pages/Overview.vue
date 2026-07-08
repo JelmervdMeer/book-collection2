@@ -2,6 +2,7 @@
 
 import { onMounted } from 'vue'
 import { storeModuleFactory } from '../../../services/store'
+import ErrorMessage from '../../../components/ErrorMessage.vue'
 
 
 const authorStore = storeModuleFactory('authors')
@@ -15,12 +16,16 @@ onMounted(() => {
 })
 
 
-const handleDelete = async (id: number) => {
+const handleDelete = async (id:number) => {
 
     try {
+
         await authorStore.actions.delete(id)
-    } catch (error) {
-        console.error('Fout bij verwijderen:', error)
+
+    } catch(error) {
+
+        console.error(error)
+
     }
 
 }
@@ -29,6 +34,7 @@ const handleDelete = async (id: number) => {
 
 
 <template>
+    <ErrorMessage />
 
     <table>
 

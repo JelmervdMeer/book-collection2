@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\ReviewController;
 
 
 Route::get('/user', function (Request $request) {
@@ -29,3 +30,28 @@ Route::post('/authors', [AuthorController::class, 'store']);
 Route::put('/authors/{author}', [AuthorController::class, 'update']);
 
 Route::delete('/authors/{author}', [AuthorController::class, 'destroy']);
+
+// Reviews
+
+Route::get(
+    '/books/{book}/reviews',
+    [ReviewController::class, 'index']
+);
+
+
+Route::post(
+    '/books/{book}/reviews',
+    [ReviewController::class, 'store']
+);
+
+
+Route::put(
+    '/reviews/{review}',
+    [ReviewController::class, 'update']
+);
+
+
+Route::delete(
+    '/reviews/{review}',
+    [ReviewController::class, 'destroy']
+);
